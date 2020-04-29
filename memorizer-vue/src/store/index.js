@@ -1,11 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+const axios = require('axios').default;
+const client = axios.create({
+  baseURL: 'https://us-central1-traj-hard.cloudfunctions.net',
+  timeout: 5000,
+});
+
 Vue.use(Vuex)
 const MINTRY = 5
 
 export default new Vuex.Store({
     state: {
+        allLessons: [{
+         
+        }],
+        downloadedLessons:[
+          {name:"test",qustions:"5",state:"new"}
+        ],
         words: [
           {a:"carnivore", q:"masožravý"},
           {a:"le désastre", q:"pohroma"},
@@ -29,9 +41,19 @@ export default new Vuex.Store({
           {a:"monstrueuse", q:"monstrum"},
           {a:"mourir", q:"zemřít"}
           ],
-        actualWordIndex: 0
+        actualWordIndex: 0,
+        loadingLessons: false
     },
     getters: {
+      loadingLessons: (state) => {
+        return state.loadingLessons
+      },
+        allLessons: (state) => {
+          return state.allLessons
+        },
+        downloadedLessons: (state) => {
+          return state.downloadedLessons
+        },
         actualWord: (state) => {
             return state.words[state.actualWordIndex]
         },
@@ -46,10 +68,31 @@ export default new Vuex.Store({
       },
       updateStatsNextTry(context, status){
         context.commit("updateStatsNextTry", status)
+      },
+
+      //downloads from firebase
+      updateAllLessons(context){
+        context.commit("loadingLessons",true)
+        console.log("Downloading...")
+        client.get("listLectures")
+        .then(data =>{
+          context.commit("loadingLessons",false)
+          context.commit("setAllLessons",data.data)
+        })
+        .catch(e => {
+          console.log(e.message)
+          context.commit("loadingLessons",false)
+        })
       }
     },
 
     mutations: {
+         setAllLessons(state,val){
+          state.allLessons = val
+         },
+         loadingLessons(state,val){
+           state.loadingLessons = val
+         },
         selectNextActualWord(state) {
             state.actualWordIndex = Math.floor(Math.random() * state.words.length)
         },
