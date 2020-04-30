@@ -11,7 +11,7 @@
             </v-card-text>
             </v-card>
         
-            <Stats  style="margin-top: 20px" />
+            <Stats style="margin-top: 20px" />
             
           </v-flex>
         </v-layout>

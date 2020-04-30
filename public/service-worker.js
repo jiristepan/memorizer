@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.c78e14be074f14c38800e4d547e99136.js"
+  "/precache-manifest.0629860433b35120528ae5d1bcaf06a8.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "memorizer"});

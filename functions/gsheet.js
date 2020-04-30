@@ -1,7 +1,31 @@
 const { google } = require("googleapis");
 
 module.exports = {
-    getListOfLessons: getListOfLessons
+    getListOfLessons: getListOfLessons,
+    getLesson : getLesson
+}
+
+function getLesson(ssheetId, code){
+    return new Promise((resolve, reject) => {
+        var jwt = getJwt();
+        var apiKey = getApiKey();
+        var spreadsheetId = ssheetId;
+        var range = code+"!A1:D100";
+    
+        readSheet(jwt, apiKey, spreadsheetId, range).then((data) => {
+          var lesson = [];
+          if (data.length > 1) {
+            for (var i = 1; i < data.length; i++) {
+              var row = data[i];
+              lesson.push({
+                q: row[0],
+                a: row[1],
+              });
+            }
+          }
+          resolve(lesson)
+        });
+      });
 }
 
 function getListOfLessons(ssheetId) {
@@ -64,3 +88,4 @@ function readSheet(jwt, apiKey, spreadsheetId, range) {
 }
 
 //getListOfLessons("1R4wRIPwQEtOmxDEeMW6u3Tm7WS1C7BuGrs5hUgdZeV4").then(data=>console.log(data));
+// getLesson("1R4wRIPwQEtOmxDEeMW6u3Tm7WS1C7BuGrs5hUgdZeV4","fr1").then(data=>console.log(data));

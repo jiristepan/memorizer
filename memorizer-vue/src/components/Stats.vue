@@ -11,7 +11,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in words" :key="item.q">
+          <tr v-for="item in actualLesson.questions" :key="item.q">
             
             <td>{{ item.q }}</td>
             <td>{{ item.stats?item.stats.count:0 }}</td>
@@ -38,7 +38,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "Stats",
   computed: {
-    ...mapGetters(["words"]),
+    ...mapGetters(["actualLesson"]),
   },
 };
 </script>
